@@ -1,9 +1,8 @@
 services:
   db:
+    container_name: mdd-db
     image: postgres:14.2
-    environment:
-      POSTGRES_USER: mdd_user
-      POSTGRES_PASSWORD: mdd_password
-      POSTGRES_DB: mdd_database
+    env_file:
+      - .env
     ports:
       - "4300:5432"
