@@ -1,0 +1,8 @@
+services:
+  db:
+    container_name: mdd-db
+    image: postgres:14.2
+    env_file:
+      - .env
+    ports:
+      - "4300:5432"
