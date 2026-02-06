@@ -1,0 +1,9 @@
+services:
+  db:
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: mdd_user
+      POSTGRES_PASSWORD: mdd_password
+      POSTGRES_DB: mdd_database
+    ports:
+      - "4300:5432"
