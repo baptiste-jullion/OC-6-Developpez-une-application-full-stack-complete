@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.controller;
 
+import com.openclassrooms.mddapi.dto.auth.request.LoginRequest;
 import com.openclassrooms.mddapi.dto.auth.request.RegisterRequest;
 import com.openclassrooms.mddapi.dto.auth.response.AuthResponse;
 import com.openclassrooms.mddapi.service.AuthService;
@@ -29,5 +30,15 @@ public class AuthController {
     )
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
         return ResponseEntity.ok(authService.register(request));
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login")
+    @ApiResponse(
+            responseCode = "200",
+            description = "User authenticated successfully"
+    )
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
+        return ResponseEntity.ok(authService.login(request));
     }
 }
