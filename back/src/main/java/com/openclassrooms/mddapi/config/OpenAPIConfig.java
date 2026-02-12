@@ -11,7 +11,7 @@ public class OpenAPIConfig {
 
     private final String scalarPath;
 
-    public OpenAPIConfig(@Value("${scalar.path}") String scalarPath) {
+    public OpenAPIConfig(@Value("${scalar.path:/docs}") String scalarPath) {
         this.scalarPath = scalarPath;
     }
 
