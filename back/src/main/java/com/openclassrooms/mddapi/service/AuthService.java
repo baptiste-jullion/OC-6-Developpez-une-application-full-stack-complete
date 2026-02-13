@@ -41,8 +41,9 @@ public class AuthService {
             optionalUser = userRepository.findByEmail(request.getLogin());
         }
 
-        if (optionalUser.isEmpty())
+        if (optionalUser.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
+        }
 
         User user = optionalUser.get();
 
