@@ -134,7 +134,25 @@ public class AuthControllerTest {
         createAndSaveValidUser();
 
         LoginRequest request = LoginRequest.builder()
-                                           .email(validEmail)
+                                           .login(validUsername)
+                                           .password(validPassword)
+                                           .build();
+
+        mockMvc.perform(post("/api/auth/login")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request))
+               )
+               .andExpect(status().isOk())
+               .andExpect(jsonPath("$.token").isNotEmpty());
+    }
+
+    @Test
+    @DisplayName("Should return a jwt When logging in with valid email")
+    public void shouldReturnAJwt_whenLoggingInWithValidEmail() throws Exception {
+        createAndSaveValidUser();
+
+        LoginRequest request = LoginRequest.builder()
+                                           .login(validEmail)
                                            .password(validPassword)
                                            .build();
 
@@ -152,8 +170,25 @@ public class AuthControllerTest {
         createAndSaveValidUser();
 
         LoginRequest request = LoginRequest.builder()
-                                           .email(validEmail)
+                                           .login(validUsername)
                                            .password("WrongPassword123!")
+                                           .build();
+
+        mockMvc.perform(post("/api/auth/login")
+                       .contentType(MediaType.APPLICATION_JSON)
+                       .content(objectMapper.writeValueAsString(request))
+               )
+               .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @DisplayName("Should return 401 When logging in with invalid username")
+    public void shouldReturn401_whenLoggingInWithInvalidUsername() throws Exception {
+        createAndSaveValidUser();
+
+        LoginRequest request = LoginRequest.builder()
+                                           .login("invalidUsername")
+                                           .password(validPassword)
                                            .build();
 
         mockMvc.perform(post("/api/auth/login")
@@ -169,7 +204,7 @@ public class AuthControllerTest {
         createAndSaveValidUser();
 
         LoginRequest request = LoginRequest.builder()
-                                           .email("invalid@email.co")
+                                           .login("invalid@email.co")
                                            .password(validPassword)
                                            .build();
 
