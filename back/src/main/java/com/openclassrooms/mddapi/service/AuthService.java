@@ -35,7 +35,11 @@ public class AuthService {
     }
 
     public AuthResponse login(LoginRequest request) {
-        Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+        Optional<User> optionalUser = userRepository.findByUsername(request.getLogin());
+
+        if (optionalUser.isEmpty()) {
+            optionalUser = userRepository.findByEmail(request.getLogin());
+        }
 
         if (optionalUser.isEmpty())
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid credentials");
