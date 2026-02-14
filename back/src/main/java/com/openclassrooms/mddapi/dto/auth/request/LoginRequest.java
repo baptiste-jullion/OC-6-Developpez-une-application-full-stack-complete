@@ -16,7 +16,7 @@ public class LoginRequest {
     @NotBlank
     private String login;
 
-    @Schema(example = "S7trongP@ssw0rd!")
+    @Schema(example = "S7rongP@ssw0rd!")
     @NotBlank
     private String password;
 }
