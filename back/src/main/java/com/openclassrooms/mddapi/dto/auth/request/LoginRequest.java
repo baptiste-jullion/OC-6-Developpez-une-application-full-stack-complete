@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class LoginRequest {
-    @Schema(example = "username123 or user@domain.ext")
+    @Schema(example = "username123", examples = {"username123", "user@domain.ext"})
     @NotBlank
     private String login;
 
