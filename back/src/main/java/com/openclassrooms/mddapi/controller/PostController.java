@@ -60,4 +60,11 @@ public class PostController {
         return ResponseEntity.status(HttpStatus.CREATED)
                              .body(commentService.createComment(postId, commentRequest, principal.getName()));
     }
+
+    @Operation(summary = "Get feed of posts from subscribed topics")
+    @GetMapping("/feed")
+    public ResponseEntity<List<PostResponse>> getFeed(Principal principal) {
+        return ResponseEntity.status(HttpStatus.OK)
+                             .body(postService.getFeed(principal.getName()));
+    }
 }

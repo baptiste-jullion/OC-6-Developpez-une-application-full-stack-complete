@@ -50,4 +50,12 @@ public class PostService {
                                   .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Post not found"));
         return postMapper.toResponse(post);
     }
+
+    @Transactional(readOnly = true)
+    public List<PostResponse> getFeed(String username) {
+        User user = userRepository.findByUsername(username)
+                                  .orElseThrow();
+        List<Post> posts = postRepository.findAllByTopicInOrderByCreatedAtDesc(user.getSubscriptions());
+        return postMapper.toResponseList(posts);
+    }
 }
