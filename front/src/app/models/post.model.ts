@@ -40,3 +40,11 @@ export const AddCommentPathParamsSchema = z.object({
   postId: z.uuid(),
 })
 export type AddCommentPathParams = z.infer<typeof AddCommentPathParamsSchema>;
+
+export const GetPostPathParamsSchema = z.object({
+  postId: z.uuid(),
+})
+export type GetPostPathParams = z.infer<typeof GetPostPathParamsSchema>;
+
+export const FeedResponseSchema = PostListResponseSchema;
+export type FeedResponse = z.infer<typeof FeedResponseSchema>;
