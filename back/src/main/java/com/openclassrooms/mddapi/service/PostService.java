@@ -26,6 +26,7 @@ public class PostService {
     private final TopicRepository topicRepository;
     private final PostMapper postMapper;
 
+    @Transactional(readOnly = true)
     public List<PostResponse> getAllPosts() {
         return postMapper.toResponseList(postRepository.findAll());
     }

@@ -13,11 +13,11 @@ import java.util.UUID;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, UUID> {
-    @EntityGraph(attributePaths = {"author", "topic"})
+    @EntityGraph(attributePaths = {"author", "topic", "comments", "comments.author"})
     @Override
     @NonNull
     List<Post> findAll();
 
-    @EntityGraph(attributePaths = {"author", "topic"})
+    @EntityGraph(attributePaths = {"author", "topic", "comments", "comments.author"})
     List<Post> findAllByTopicInOrderByCreatedAtDesc(Collection<Topic> topics);
 }
