@@ -49,7 +49,6 @@ export class PostCreateComponent {
     if (this.form.invalid || this.isSubmitting()) return;
     this.isSubmitting.set(true);
     try {
-      console.log({payload: this.form.getRawValue()})
       await this.postService.createPost({ payload: this.form.getRawValue() });
       await this.postService.loadFeed();
       await this.router.navigateByUrl('/posts');
