@@ -1,4 +1,4 @@
-import { Injectable, computed, inject, signal } from '@angular/core';
+import { Injectable, computed, effect, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
@@ -11,17 +11,27 @@ import {
   TopicSubscriptionPathParamsSchema,
 } from '../../models/topic.model';
 
-const SUBS_KEY = 'mdd.topic.subscriptions';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class TopicService {
   private readonly http = inject(HttpClient);
+  private readonly auth = inject(AuthService);
 
   private readonly topicsSignal = signal<TopicResponse[]>([]);
-  private readonly subscribedIdsSignal = signal<Set<string>>(this.restoreSubscriptions());
+  private readonly subscribedIdsSignal = signal<Set<string>>(new Set());
 
   readonly topics = computed(() => this.topicsSignal());
   readonly subscribedIds = computed(() => this.subscribedIdsSignal());
+
+  constructor() {
+    effect(() => {
+      const user = this.auth.user();
+      if (!user) {
+        this.subscribedIdsSignal.set(new Set());
+      }
+    });
+  }
 
   async loadTopics() {
     const raw = await firstValueFrom(
@@ -29,6 +39,11 @@ export class TopicService {
     );
     const topics = TopicListResponseSchema.parse(raw);
     this.topicsSignal.set(topics);
+
+    const subscribedIds = new Set(
+      topics.filter((t) => t.subscribed).map((t) => t.id)
+    );
+    this.subscribedIdsSignal.set(subscribedIds);
     return topics;
   }
 
@@ -60,23 +75,5 @@ export class TopicService {
       next.delete(topicId);
     }
     this.subscribedIdsSignal.set(next);
-    this.persistSubscriptions(next);
-  }
-
-  private restoreSubscriptions(): Set<string> {
-    try {
-      const raw = localStorage.getItem(SUBS_KEY);
-      if (!raw) return new Set();
-      const parsed: string[] = JSON.parse(raw);
-      return new Set(parsed);
-    } catch {
-      return new Set();
-    }
-  }
-
-  private persistSubscriptions(ids: Set<string>): void {
-    try {
-      localStorage.setItem(SUBS_KEY, JSON.stringify(Array.from(ids)));
-    } catch {}
   }
 }

@@ -4,6 +4,7 @@ export const TopicResponseSchema = z.object({
   id: z.uuid(),
   title: z.string(),
   description: z.string(),
+  subscribed: z.boolean().optional().default(false),
 })
 export type TopicResponse = z.infer<typeof TopicResponseSchema>;
 
