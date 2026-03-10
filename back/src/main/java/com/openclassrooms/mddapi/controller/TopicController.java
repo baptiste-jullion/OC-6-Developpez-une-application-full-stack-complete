@@ -22,9 +22,9 @@ public class TopicController {
 
     @Operation(summary = "List all topics")
     @GetMapping
-    public ResponseEntity<List<TopicResponse>> list() {
+    public ResponseEntity<List<TopicResponse>> list(Principal principal) {
         return ResponseEntity.status(HttpStatus.OK)
-                             .body(topicService.getAllTopics());
+                             .body(topicService.getAllTopics(principal.getName()));
     }
 
     @Operation(summary = "Subscribe to a topic")

@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.UUID;
 
 @Service
@@ -22,8 +24,18 @@ public class TopicService {
     private final TopicMapper topicMapper;
     private final UserRepository userRepository;
 
-    public List<TopicResponse> getAllTopics() {
-        return topicMapper.toResponseList(topicRepository.findAll());
+    @Transactional(readOnly = true)
+    public List<TopicResponse> getAllTopics(String username) {
+        Set<UUID> subscribedTopicIds = userRepository.findByUsername(username)
+                                                     .map(user -> user.getSubscriptions()
+                                                                      .stream()
+                                                                      .map(Topic::getId)
+                                                                      .collect(Collectors.toSet()))
+                                                     .orElseGet(Set::of);
+
+        List<TopicResponse> responses = topicMapper.toResponseList(topicRepository.findAll());
+        responses.forEach(r -> r.setSubscribed(subscribedTopicIds.contains(r.getId())));
+        return responses;
     }
 
     @Transactional
