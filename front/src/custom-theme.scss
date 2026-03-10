@@ -6,6 +6,8 @@
 // custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
 
+$mdd-purple: #7702FF;
+
 html {
   @include mat.theme((
     color: (
@@ -15,6 +17,28 @@ html {
     typography: Roboto,
     density: 0,
   ));
+}
+
+:root {
+  --mdd-purple: #{$mdd-purple};
+  --mdd-purple-contrast: #fff;
+}
+
+.mdd-toolbar {
+  background-color: var(--mdd-purple);
+  color: var(--mdd-purple-contrast);
+}
+
+.mdd-toolbar a,
+.mdd-toolbar button,
+.mdd-toolbar mat-icon {
+  color: inherit;
+}
+
+button.mdd-raised.mat-mdc-raised-button,
+button.mdd-raised {
+  background-color: var(--mdd-purple) !important;
+  color: var(--mdd-purple-contrast) !important;
 }
 
 body {

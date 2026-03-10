@@ -13,8 +13,9 @@ export type CommentListResponse = z.infer<typeof CommentListResponseSchema>;
 
 export const PostResponseSchema = z.object({
   author: z.string(),
-  comments: z.array(CommentResponseSchema),
+  comments: z.array(CommentResponseSchema).nullable().default([]),
   content: z.string(),
+  createdAt: z.coerce.date(),
   id: z.uuid(),
   title: z.string(),
   topic: z.string(),

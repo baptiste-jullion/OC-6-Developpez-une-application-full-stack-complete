@@ -17,6 +17,7 @@ public interface PostMapper {
     @Mapping(target = "content", source = "content")
     @Mapping(target = "author", source = "author.username")
     @Mapping(target = "topic", source = "topic.title")
+    @Mapping(target = "createdAt", source = "createdAt")
     @Mapping(target = "comments", source = "comments")
     PostResponse toResponse(Post post);
 

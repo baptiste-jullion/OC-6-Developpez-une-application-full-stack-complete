@@ -1,0 +1,60 @@
+<div class="grid gap-4">
+  @if (post(); as p) {
+    <section class="grid gap-2">
+      <header class="grid gap-1">
+        <div class="flex items-center gap-2">
+          <a
+            class="shrink-0"
+            mat-icon-button
+            routerLink="/posts"
+            aria-label="Retour"
+          >
+            <mat-icon>keyboard_backspace</mat-icon>
+          </a>
+          <h1 class="m-0 text-xl font-semibold">{{ p.title }}</h1>
+        </div>
+        <div class="text-sm opacity-80">
+          {{ p.createdAt | date: "dd/MM/yyyy" }} · {{ p.author }} ·
+          {{ p.topic }}
+        </div>
+      </header>
+
+      <p class="m-0 whitespace-pre-wrap">{{ p.content }}</p>
+    </section>
+
+    <hr class="w-full" />
+
+    <section class="grid gap-3">
+      <h2>Commentaires</h2>
+
+      @for (c of p.comments; track c.id) {
+        <mat-card class="comment">
+          <mat-card-content>
+            <div class="mb-1.5 font-semibold">{{ c.author }}</div>
+            <div class="comment-content">{{ c.content }}</div>
+          </mat-card-content>
+        </mat-card>
+      }
+
+      <form
+        class="flex items-center gap-2"
+        [formGroup]="commentForm"
+        (ngSubmit)="sendComment()"
+      >
+        <mat-form-field appearance="outline" class="min-w-0 flex-1">
+          <mat-label>Ajouter un commentaire</mat-label>
+          <input matInput formControlName="content" />
+        </mat-form-field>
+
+        <button
+          mat-icon-button
+          type="submit"
+          aria-label="Envoyer"
+          [disabled]="isSending()"
+        >
+          <mat-icon>send</mat-icon>
+        </button>
+      </form>
+    </section>
+  }
+</div>

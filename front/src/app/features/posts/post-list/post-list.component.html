@@ -1,0 +1,35 @@
+<div
+  class="mb-4 flex flex-col md:flex-row flex-wrap items-center justify-between gap-3"
+>
+  <button mat-raised-button class="mdd-raised" routerLink="/posts/create">
+    Créer un article
+  </button>
+
+  <mat-form-field appearance="outline" class="w-full max-w-65">
+    <mat-label>Trier par</mat-label>
+    <mat-select
+      [value]="sortOrder()"
+      (selectionChange)="sortOrder.set($event.value)"
+    >
+      <mat-option value="date_desc">Date décroissante</mat-option>
+      <mat-option value="date_asc">Date croissante</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+  @for (post of sortedFeed(); track post.id) {
+    <mat-card class="cursor-pointer" [routerLink]="['/posts', post.id]">
+      <mat-card-header>
+        <mat-card-title>{{ post.title }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ post.createdAt | date: "dd/MM/yyyy" }} · {{ post.author }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p class="m-0 line-clamp-5">{{ post.content }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

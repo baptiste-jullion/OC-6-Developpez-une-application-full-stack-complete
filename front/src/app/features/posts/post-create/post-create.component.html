@@ -1,0 +1,44 @@
+<div class="grid min-h-[calc(100vh-64px)] items-start justify-items-center p-6">
+  <form
+    class="grid w-full max-w-180 gap-3"
+    [formGroup]="form"
+    (ngSubmit)="submit()"
+  >
+    <div class="flex items-center gap-2">
+      <a mat-icon-button routerLink="/posts" aria-label="Retour">
+        <mat-icon>keyboard_backspace</mat-icon>
+      </a>
+      <h1 class="m-0">Créer un article</h1>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Thème</mat-label>
+      <mat-select formControlName="topicId">
+        @for (topic of topics(); track topic.id) {
+          <mat-option [value]="topic.id">
+            {{ topic.title }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Titre</mat-label>
+      <input matInput formControlName="title" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Contenu</mat-label>
+      <textarea matInput rows="8" formControlName="content"></textarea>
+    </mat-form-field>
+
+    <button
+      mat-raised-button
+      class="mdd-raised"
+      type="submit"
+      [disabled]="isSubmitting()"
+    >
+      Publier
+    </button>
+  </form>
+</div>

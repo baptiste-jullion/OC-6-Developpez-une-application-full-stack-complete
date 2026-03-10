@@ -23,8 +23,10 @@ export class PostService {
   private readonly http = inject(HttpClient);
 
   private readonly feedSignal = signal<PostResponse[]>([]);
+  private readonly selectedPostSignal = signal<PostResponse | null>(null);
 
   readonly feed = computed(() => this.feedSignal());
+  readonly selectedPost = computed(() => this.selectedPostSignal());
 
   async loadFeed() {
     const raw = await firstValueFrom(
@@ -41,6 +43,12 @@ export class PostService {
       this.http.get<PostResponse>(`${environment.apiUrl}/posts/${postId}`)
     );
     return PostResponseSchema.parse(raw);
+  }
+
+  async loadPostById({ path }: { path: GetPostPathParams }) {
+    const post = await this.getPostById({ path });
+    this.selectedPostSignal.set(post);
+    return post;
   }
 
   async createPost({ payload }: { payload: CreatePostRequest }) {
@@ -66,6 +74,16 @@ export class PostService {
         validatedPayload
       )
     );
-    return CommentResponseSchema.parse(raw);
+    const created = CommentResponseSchema.parse(raw);
+
+    const selected = this.selectedPostSignal();
+    if (selected && selected.id === validatedParams.postId) {
+      this.selectedPostSignal.set({
+        ...selected,
+        comments: [...(selected.comments || []), created],
+      });
+    }
+
+    return created;
   }
 }

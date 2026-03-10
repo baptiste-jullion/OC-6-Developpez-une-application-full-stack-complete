@@ -56,12 +56,14 @@ class TopicServiceTest {
                                                              .description("Tech desc")
                                                              .build());
 
+        when(userRepository.findByUsername("john")).thenReturn(Optional.empty());
         when(topicRepository.findAll()).thenReturn(topics);
         when(topicMapper.toResponseList(topics)).thenReturn(responses);
 
-        List<TopicResponse> result = topicService.getAllTopics();
+        List<TopicResponse> result = topicService.getAllTopics("john");
 
         assertEquals(responses, result);
+        verify(userRepository).findByUsername("john");
         verify(topicRepository).findAll();
         verify(topicMapper).toResponseList(topics);
     }
